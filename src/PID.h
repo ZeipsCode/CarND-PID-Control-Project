@@ -28,7 +28,7 @@ public:
   std::vector<double> dp;
   int step, parameter;
   // number of steps to allow changes to settle, then to evaluate error
-  int n_settle_steps, n_eval_steps;
+  int train_steps, eval_steps;
   double total_error, best_error;
   bool used_addition, used_subtraction, use_twiddle;
 

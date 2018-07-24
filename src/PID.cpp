@@ -24,8 +24,8 @@ void PID::Init(double Kp, double Ki, double Kd) {
     use_twiddle = true;
         
     parameter = 0;  
-    n_settle_steps = 100;
-    n_eval_steps = 300;
+    train_steps = 100;
+    eval_steps = 300;
     total_error = 0;
     best_error = 1000; // just some random high number for initialization
     used_addition = false; // twiddle parameter
@@ -42,20 +42,20 @@ void PID::UpdateError(double cte) {
     p_error = cte;
     i_error += cte;
     
-    if (step % (n_settle_steps + n_eval_steps) > n_settle_steps){
+    if (step % (train_steps + eval_steps) > train_steps){
         total_error += pow(cte,2);
     }
 
     // start twiddling regularly
     //  instead of loop try at every update step
 
-    if (use_twiddle && step % (n_settle_steps + n_eval_steps) == 0){
+    if (use_twiddle && step % (train_steps + eval_steps) == 0){
         
         cout << "best error: " << best_error << endl;
         if (total_error < best_error) {
             best_error = total_error;
     
-            if (step !=  n_settle_steps + n_eval_steps) {
+            if (step !=  train_steps + eval_steps) {
                 dp[parameter] *= 1.1;            
             }
             // choose next parameter to update
